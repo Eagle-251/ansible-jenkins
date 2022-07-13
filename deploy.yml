@@ -1,0 +1,55 @@
+--- 
+- hosts: all
+  become: true
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Install Pip.
+      apt: name=python3-pip state=present
+
+    - name: Install Docker Python library.
+      pip: name=docker state=present
+
+    - name: Enusre base Docker paths exsits
+      file: 
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - "{{ docker_base_dir }}"
+
+    - name: Ensure networks exist
+      docker_network:
+        name: "{{ jenkins_docker_network }}"
+          
+    - name: Ensure paths exist 
+      file: 
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - "{{ jenkins_volumes }}"
+
+
+    - name: Transfer dockerfile to host
+      copy:
+        src: "{{ playbook_dir }}/build/Dockerfile"
+        dest: "{{ jenkins_build_path }}/Dockerfile"
+
+    - name: Build Jenkins image
+      command: "docker build -t {{ jenkins_image_name }} {{jenkins_build_path}}"
+
+
+    - name: Enusre Jenkins container is created and running 
+      docker_container:
+        name: "{{ jenkins_container_name }}"
+        image: "{{ jenkins_image_name }}"
+        user: "root:root"
+        env:
+        networks:
+          - name: "{{ jenkins_docker_network }}"
+        volumes:
+          - "{{ host_docker_socket}}:/var/run/docker.sock"
+          - "{{ jenkins_data_dir }}:/var/jenkins_home"
+        published_ports: "{{ jenkins_published_ports }}"
+        state: present

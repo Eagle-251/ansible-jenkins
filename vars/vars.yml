@@ -1,0 +1,20 @@
+# Base Docker Vars
+docker_base_dir: "/srv"
+host_docker_socket: "/var/run/docker.sock"
+
+jenkins_published_ports:
+  - 8080:8080
+  - 50000:50000
+
+jenkins_data_dir: "{{ docker_base_dir}}/jenkins/data"
+
+jenkins_docker_network: jenkins
+
+jenkins_container_name: jenkins
+jenkins_volumes:
+  - "{{ jenkins_dind_tls_dir}}"
+  - "{{ jenkins_data_dir }}"
+  - "{{ jenkins_build_path }}"
+
+jenkins_build_path: "{{ docker_base_dir}}/jenkins/build"
+jenkins_image_name: "jenkins"
