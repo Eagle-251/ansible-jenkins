@@ -18,4 +18,4 @@ jenkins_volumes:
 jenkins_build_path: "{{ docker_base_dir}}/jenkins/build"
 jenkins_image_name: "jenkins"
 
-jenkins_install_plugins_enabled: yes
+#TODO#jenkins_install_plugins_enabled: yes
