@@ -12,9 +12,10 @@ jenkins_docker_network: jenkins
 
 jenkins_container_name: jenkins
 jenkins_volumes:
-  - "{{ jenkins_dind_tls_dir}}"
   - "{{ jenkins_data_dir }}"
   - "{{ jenkins_build_path }}"
 
 jenkins_build_path: "{{ docker_base_dir}}/jenkins/build"
 jenkins_image_name: "jenkins"
+
+jenkins_install_plugins_enabled: yes

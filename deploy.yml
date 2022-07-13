@@ -52,4 +52,8 @@
           - "{{ host_docker_socket}}:/var/run/docker.sock"
           - "{{ jenkins_data_dir }}:/var/jenkins_home"
         published_ports: "{{ jenkins_published_ports }}"
-        state: present
+        state: started 
+        restart: yes
+          
+
+
